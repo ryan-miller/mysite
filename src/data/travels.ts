@@ -54,7 +54,7 @@ export const trips: Trip[] = [
 ];
 
 // Two-letter codes of states you've camped in. Used for the states grid.
-export const statesVisited: string[] = []; // TODO: e.g. ['UT', 'AZ', 'CO']
+export const statesVisited: string[] = ['AZ', 'UT', 'CA', 'NM', 'TX']; 
 
 export const tips = [
   { title: 'Arrive before dark', body: 'Backing in by headlamp is a character-building exercise you only need once.' },
