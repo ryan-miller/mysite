@@ -2,18 +2,18 @@
 
 export const rig = {
   // TODO: your actual rig details
-  name: 'TODO: Name your Airstream',
-  model: 'TODO: e.g. Airstream Flying Cloud 25FB',
-  year: 'TODO',
-  towVehicle: 'TODO: Tow vehicle',
-  mods: ['TODO: Solar upgrade', 'TODO: Lithium batteries', 'TODO: Bike rack'],
+  name: 'OPSHUNS',
+  model: 'Airstream International 25FBT',
+  year: '2023',
+  towVehicle: '2024 Ford F-250 Tremor',
+  mods: ['300w Solar, 200 ah Battleborn LifePO4 batteries, One Up bike rack'],
 };
 
 export const stats = [
-  { value: 'TODO', label: 'Miles towed' },
-  { value: 'TODO', label: 'States visited' },
-  { value: 'TODO', label: 'Nights on the road' },
-  { value: 'TODO', label: 'National parks' },
+  { value: '12000', label: 'Miles towed' },
+  { value: '5', label: 'States visited' },
+  { value: '~550', label: 'Nights on the road' },
+  { value: '0', label: 'National parks' },
 ];
 
 export interface Trip {
@@ -30,43 +30,26 @@ export interface Trip {
 
 export const trips: Trip[] = [
   {
-    title: 'Next up: TODO destination',
-    dates: 'TODO',
-    route: 'TODO → TODO',
-    highlights: ['TODO: What you are most excited about'],
+    title: 'Next up: Escalante, UT',
+    dates: '10/3 - 10/10',
+    route: 'Flagstaff -> Page -> Escalante',
+    highlights: ['First National Park - Bryce Canyon'],
     tag: 'Planned',
+    campgrounds: ['Antelope RV -> Escalante Petrified Forest State Park'],
     upcoming: true,
   },
   {
-    title: 'TODO: Southwest Desert Loop',
-    dates: 'TODO 2026',
-    route: 'TODO: Moab → Capitol Reef → Bryce → Zion',
-    miles: 0,
-    nights: 0,
-    highlights: [
-      'TODO: Sunrise ride along a canyon rim',
-      'TODO: Best boondocking spot of the trip',
-    ],
-    campgrounds: ['TODO: Campground name'],
-    tag: 'Desert',
-  },
-  {
-    title: 'TODO: Pacific Coast Run',
-    dates: 'TODO 2025',
-    route: 'TODO: Olympic Peninsula → Oregon Coast → Redwoods',
-    miles: 0,
-    nights: 0,
-    highlights: ['TODO: Highlight', 'TODO: Highlight'],
-    tag: 'Coast',
-  },
-  {
-    title: 'TODO: Race-cation',
-    dates: 'TODO 2025',
-    route: 'TODO: Home → Race venue',
-    miles: 0,
-    nights: 0,
-    highlights: ['TODO: Combined a race with a week on the road'],
-    tag: 'Race trip',
+    title: 'Back to Flagstaff, AZ through October',
+    dates: 'Until 10/25',
+    //route: '',
+    //miles: 0,
+    //nights: 0,
+    //highlights: [
+      //'TODO: Sunrise ride along a canyon rim',
+      //'TODO: Best boondocking spot of the trip',
+    //],
+    campgrounds: ['Village Camp Flagstaff'],
+    tag: 'Mountains',
   },
 ];
 

@@ -87,6 +87,6 @@ export const books: Book[] = [
     genre: 'Historical Fiction',
     rating: 5,
     //favorite: true,
-    note: 'Destroed me for a bit.',
+    note: 'Destroyed me for a bit.',
   },
 ];
