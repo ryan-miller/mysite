@@ -1,0 +1,456 @@
+---
+import Base from '../layouts/Base.astro';
+import { profile } from '../data/profile';
+import { coaching } from '../data/coaching';
+---
+
+<Base title="Multisport Coaching" description={coaching.intro}>
+  <section class="coach-hero">
+    <div class="container hero-grid">
+      <div>
+        <span class="eyebrow">Multisport coaching</span>
+        <h1>{coaching.headline}</h1>
+        <p class="lede">{coaching.intro}</p>
+        <div class="sports">
+          {coaching.sports.map((s) => <span class="chip">{s}</span>)}
+        </div>
+        <div class="cta">
+          <a class="btn btn-primary" href={`mailto:${profile.email}?subject=Coaching%20intro%20call`}>Book a free intro call</a>
+          <a class="btn btn-ghost" href="#services">See options</a>
+        </div>
+      </div>
+      <div class="disciplines" aria-hidden="true">
+        <div class="disc swim">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 18c2 0 2-1.5 4-1.5S8 18 10 18s2-1.5 4-1.5 2 1.5 4 1.5 2-1.5 4-1.5"></path><circle cx="16" cy="7" r="2"></circle><path d="M4 13l5-4 3 2 4-2"></path></svg>
+          <span>Swim</span>
+        </div>
+        <div class="disc bike">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="5.5" cy="17" r="3.5"></circle><circle cx="18.5" cy="17" r="3.5"></circle><path d="M5.5 17l4-8h5l4 8M9.5 9L12 17h1M14 6h2"></path></svg>
+          <span>Bike</span>
+        </div>
+        <div class="disc run">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="14" cy="4" r="2"></circle><path d="M7 21l3-6 3 2v4M10 15l2-5 4 3h3M6 12l3-3h3"></path></svg>
+          <span>Run</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section container">
+    <span class="eyebrow">Philosophy</span>
+    <h2>How I coach</h2>
+    <div class="phil">
+      {
+        coaching.philosophy.map((p, i) => (
+          <article class="card phil-card reveal" style={`transition-delay:${i * 70}ms`}>
+            <span class="phil-num">{String(i + 1).padStart(2, '0')}</span>
+            <h3>{p.title}</h3>
+            <p>{p.body}</p>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="section services-band" id="services">
+    <div class="container">
+      <span class="eyebrow">Services</span>
+      <h2>Ways to work together</h2>
+      <div class="services">
+        {
+          coaching.services.map((s) => (
+            <article class:list={['card', 'service', 'reveal', { featured: s.featured }]}>
+              {s.featured && <span class="badge">Most popular</span>}
+              <h3>{s.name}</h3>
+              <p class="price">
+                <span class="amount">{s.price === 'TODO' ? '$—' : s.price}</span>
+                <span class="cadence">{s.cadence}</span>
+              </p>
+              <p class="blurb">{s.blurb}</p>
+              <ul>
+                {s.features.map((f) => (
+                  <li>{f}</li>
+                ))}
+              </ul>
+              <a
+                class={`btn ${s.featured ? 'btn-primary' : 'btn-ghost'}`}
+                href={`mailto:${profile.email}?subject=${encodeURIComponent(s.name + ' inquiry')}`}
+              >
+                Get started
+              </a>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section container">
+    <div class="process-grid">
+      <div>
+        <span class="eyebrow">Process</span>
+        <h2>From first call to finish line</h2>
+        <ol class="process">
+          {
+            coaching.process.map((p) => (
+              <li class="reveal">
+                <h3>{p.step}</h3>
+                <p>{p.body}</p>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+      <div class="card creds reveal">
+        <h3>Credentials</h3>
+        <ul>
+          {coaching.credentials.map((c) => <li>{c}</li>)}
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section testi-band">
+    <div class="container">
+      <span class="eyebrow">Athletes</span>
+      <h2>What athletes say</h2>
+      <div class="testis">
+        {
+          coaching.testimonials.map((t) => (
+            <figure class="card testi reveal">
+              <blockquote>“{t.quote}”</blockquote>
+              <figcaption>
+                <strong>{t.name}</strong> · {t.detail}
+              </figcaption>
+            </figure>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section container faq-wrap">
+    <span class="eyebrow">FAQ</span>
+    <h2>Common questions</h2>
+    <div class="faq">
+      {
+        coaching.faq.map((f) => (
+          <details class="card">
+            <summary>{f.q}</summary>
+            <p>{f.a}</p>
+          </details>
+        ))
+      }
+    </div>
+  </section>
+</Base>
+
+<style>
+  .coach-hero {
+    padding-block: clamp(3rem, 7vw, 5.5rem);
+    background:
+      radial-gradient(ellipse at 85% 20%, color-mix(in srgb, var(--accent) 14%, transparent), transparent 55%),
+      radial-gradient(ellipse at 10% 90%, color-mix(in srgb, var(--sky) 12%, transparent), transparent 50%);
+  }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 3rem;
+    align-items: center;
+  }
+  .sports {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1.25rem;
+  }
+  .cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1.75rem;
+  }
+  .disciplines {
+    display: grid;
+    gap: 1rem;
+  }
+  .disc {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    padding: 1.2rem 1.5rem;
+    border-radius: 20px;
+    color: #fff;
+    font-family: var(--font-display);
+    font-size: 1.8rem;
+    font-weight: 600;
+    box-shadow: var(--shadow);
+    transition: transform 0.3s ease;
+  }
+  .disc:hover {
+    transform: translateX(-8px);
+  }
+  .disc svg {
+    width: 44px;
+    height: 44px;
+  }
+  .swim {
+    background: linear-gradient(120deg, #2b6cb0, #3b9fc9);
+    margin-right: 3rem;
+  }
+  .bike {
+    background: linear-gradient(120deg, #2f6f6a, #4f9d73);
+    margin-left: 1.5rem;
+    margin-right: 1.5rem;
+  }
+  .run {
+    background: linear-gradient(120deg, #c2410c, #e8713c);
+    margin-left: 3rem;
+  }
+
+  .phil {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.25rem;
+    margin-top: 2rem;
+  }
+  .phil-card {
+    padding: 1.6rem;
+  }
+  .phil-num {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 2.2rem;
+    color: var(--accent);
+    margin-bottom: 0.6rem;
+  }
+  .phil-card p {
+    color: var(--muted);
+    margin: 0;
+    font-size: 0.97rem;
+  }
+
+  .services-band,
+  .testi-band {
+    background: var(--surface-2);
+    border-block: 1px solid var(--line);
+  }
+  .services {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-top: 2rem;
+    align-items: stretch;
+  }
+  .service {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: 2rem;
+  }
+  .service.featured {
+    border: 2px solid var(--accent);
+    transform: translateY(-10px);
+  }
+  .service.featured.reveal.is-visible {
+    transform: translateY(-10px);
+  }
+  .badge {
+    position: absolute;
+    top: -13px;
+    left: 2rem;
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.25rem 0.7rem;
+    border-radius: 999px;
+  }
+  .price {
+    display: flex;
+    align-items: baseline;
+    gap: 0.4rem;
+  }
+  .amount {
+    font-family: var(--font-display);
+    font-size: 2.6rem;
+    font-weight: 700;
+  }
+  .cadence,
+  .blurb {
+    color: var(--muted);
+  }
+  .service ul {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1.75rem;
+    flex: 1;
+  }
+  .service li {
+    padding: 0.45rem 0 0.45rem 1.7rem;
+    position: relative;
+    border-top: 1px solid var(--line);
+    font-size: 0.95rem;
+  }
+  .service li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: var(--pine);
+    font-weight: 700;
+  }
+  .service .btn {
+    justify-content: center;
+  }
+
+  .process-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 3rem;
+    align-items: start;
+  }
+  .process {
+    list-style: none;
+    counter-reset: step;
+    padding: 0;
+    margin: 2rem 0 0;
+  }
+  .process li {
+    counter-increment: step;
+    position: relative;
+    padding: 0 0 1.75rem 3.75rem;
+  }
+  .process li::before {
+    content: counter(step);
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 2.6rem;
+    height: 2.6rem;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--ink);
+    color: var(--bg);
+    font-weight: 700;
+  }
+  .process li:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    left: 1.25rem;
+    top: 2.8rem;
+    bottom: 0.3rem;
+    width: 2px;
+    background: var(--line);
+  }
+  .process h3 {
+    margin-bottom: 0.25rem;
+  }
+  .process p {
+    color: var(--muted);
+    margin: 0;
+  }
+  .creds {
+    padding: 2rem;
+    position: sticky;
+    top: 90px;
+  }
+  .creds ul {
+    padding-left: 1.1rem;
+    margin: 0;
+  }
+  .creds li + li {
+    margin-top: 0.6rem;
+  }
+
+  .testis {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
+  .testi {
+    margin: 0;
+    padding: 2rem;
+  }
+  .testi blockquote {
+    margin: 0 0 1rem;
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    font-style: italic;
+  }
+  .testi figcaption {
+    color: var(--muted);
+  }
+
+  .faq-wrap {
+    max-width: 860px;
+  }
+  .faq {
+    display: grid;
+    gap: 0.75rem;
+    margin-top: 1.75rem;
+  }
+  details {
+    padding: 0 1.4rem;
+  }
+  summary {
+    cursor: pointer;
+    padding-block: 1.1rem;
+    font-weight: 600;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  summary::-webkit-details-marker {
+    display: none;
+  }
+  summary::after {
+    content: '+';
+    font-size: 1.4rem;
+    line-height: 1;
+    color: var(--accent);
+    transition: transform 0.2s ease;
+  }
+  details[open] summary::after {
+    transform: rotate(45deg);
+  }
+  details p {
+    color: var(--muted);
+    padding-bottom: 1.1rem;
+    margin: 0;
+  }
+
+  @media (max-width: 960px) {
+    .hero-grid,
+    .process-grid {
+      grid-template-columns: 1fr;
+    }
+    .phil {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .services {
+      grid-template-columns: 1fr;
+      max-width: 520px;
+    }
+    .service.featured,
+    .service.featured.reveal.is-visible {
+      transform: none;
+    }
+    .creds {
+      position: static;
+    }
+  }
+  @media (max-width: 600px) {
+    .phil,
+    .testis {
+      grid-template-columns: 1fr;
+    }
+    .disc {
+      margin-inline: 0 !important;
+    }
+  }
+</style>

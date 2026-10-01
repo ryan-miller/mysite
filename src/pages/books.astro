@@ -1,0 +1,349 @@
+---
+import Base from '../layouts/Base.astro';
+import { books, readingGoal, type Book } from '../data/books';
+
+const coverColors = ['#2f6f6a', '#3b6ea5', '#d2592a', '#7a5aa6', '#b98d1f', '#8c3b3b', '#2d4a3e', '#44546a'];
+const colorFor = (b: Book) =>
+  b.color ?? coverColors[[...b.title].reduce((a, c) => a + c.charCodeAt(0), 0) % coverColors.length];
+
+const reading = books.filter((b) => b.shelf === 'reading');
+const shelfOrder = { reading: 0, read: 1, 'to-read': 2 } as const;
+const library = [...books].sort((a, b) => shelfOrder[a.shelf] - shelfOrder[b.shelf]);
+const counts = {
+  all: books.length,
+  read: books.filter((b) => b.shelf === 'read').length,
+  'to-read': books.filter((b) => b.shelf === 'to-read').length,
+  favorite: books.filter((b) => b.favorite).length,
+};
+const goalDone = readingGoal.done || counts.read;
+const goalPct = Math.min(100, Math.round((goalDone / readingGoal.target) * 100));
+const shelfLabel = { reading: 'Reading now', read: 'Read', 'to-read': 'Want to read' };
+---
+
+<Base title="Books & Reading" description="What I'm reading, what I loved, and what's next on the stack.">
+  <section class="container page-hero">
+    <span class="eyebrow">Books &amp; reading</span>
+    <h1>The nightstand.</h1>
+    <p class="lede">Endurance, history, philosophy, science, and the occasional novel. These are the books I'm reading, the ones that stayed with me, and the stack waiting next.</p>
+    <p class="placeholder-note">📚 Sample titles shown. Edit <code>src/data/books.ts</code> to add your own shelf.</p>
+  </section>
+
+  <section class="container top-row">
+    {
+      reading.map((b) => (
+        <article class="card now-reading reveal">
+          <div class="cover big" style={`--c:${colorFor(b)}`}>
+            <span class="c-title">{b.title}</span>
+            <span class="c-author">{b.author}</span>
+          </div>
+          <div>
+            <span class="eyebrow">Currently reading</span>
+            <h2>{b.title}</h2>
+            <p class="by">by {b.author}</p>
+            {b.note && <p class="note">“{b.note}”</p>}
+            <span class="chip">{b.genre}</span>
+          </div>
+        </article>
+      ))
+    }
+    <article class="card goal reveal">
+      <span class="eyebrow">{readingGoal.year} reading goal</span>
+      <div class="ring" style={`--p:${goalPct}`}>
+        <div>
+          <strong>{goalDone}</strong>
+          <span>of {readingGoal.target}</span>
+        </div>
+      </div>
+      <p>{goalPct}% of the way there</p>
+    </article>
+  </section>
+
+  <section class="section container">
+    <div class="shelf-head">
+      <h2>The library</h2>
+      <div class="filters" role="group" aria-label="Filter books">
+        <button type="button" data-filter="all" aria-pressed="true">All <span>{counts.all}</span></button>
+        <button type="button" data-filter="read" aria-pressed="false">Read <span>{counts.read}</span></button>
+        <button type="button" data-filter="to-read" aria-pressed="false">Want to read <span>{counts['to-read']}</span></button>
+        <button type="button" data-filter="favorite" aria-pressed="false">★ Favorites <span>{counts.favorite}</span></button>
+      </div>
+    </div>
+
+    <ul class="books">
+      {
+        library.map((b) => (
+          <li class="book" data-shelf={b.shelf} data-favorite={b.favorite ? 'true' : 'false'}>
+            <div class="cover" style={`--c:${colorFor(b)}`}>
+              {b.favorite && <span class="fav" title="Favorite">★</span>}
+              <span class="c-title">{b.title}</span>
+              <span class="c-author">{b.author}</span>
+            </div>
+            <div class="info">
+              <h3>{b.title}</h3>
+              <p class="by">{b.author}</p>
+              <div class="row">
+                <span class={`shelf shelf-${b.shelf}`}>{shelfLabel[b.shelf]}</span>
+                {b.rating && (
+                  <span class="stars" aria-label={`${b.rating} out of 5 stars`}>
+                    {'★'.repeat(b.rating)}
+                    <span class="off">{'★'.repeat(5 - b.rating)}</span>
+                  </span>
+                )}
+              </div>
+              {b.note && <p class="note-sm">{b.note}</p>}
+            </div>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+</Base>
+
+<script>
+  const buttons = document.querySelectorAll<HTMLButtonElement>('[data-filter]');
+  const items = document.querySelectorAll<HTMLElement>('.book');
+  buttons.forEach((btn) =>
+    btn.addEventListener('click', () => {
+      const f = btn.dataset.filter;
+      buttons.forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+      items.forEach((el) => {
+        const show =
+          f === 'all' || (f === 'favorite' ? el.dataset.favorite === 'true' : el.dataset.shelf === f);
+        el.hidden = !show;
+      });
+    }),
+  );
+</script>
+
+<style>
+  .top-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 1.5rem;
+  }
+  .now-reading {
+    display: grid;
+    grid-template-columns: 170px 1fr;
+    gap: 2rem;
+    padding: 2rem;
+    align-items: center;
+  }
+  .now-reading h2 {
+    margin-bottom: 0.2rem;
+  }
+  .by {
+    color: var(--muted);
+    margin-bottom: 0.6rem;
+  }
+  .note {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.15rem;
+  }
+
+  .cover {
+    --c: #2f6f6a;
+    position: relative;
+    aspect-ratio: 2 / 3;
+    border-radius: 4px 10px 10px 4px;
+    padding: 14% 12% 10% 16%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    color: #fff;
+    background:
+      linear-gradient(90deg, rgb(0 0 0 / 0.28) 0 5%, rgb(255 255 255 / 0.12) 5% 6.5%, transparent 6.5%),
+      linear-gradient(160deg, color-mix(in srgb, var(--c) 80%, white), var(--c) 45%, color-mix(in srgb, var(--c) 70%, black));
+    box-shadow: 0 2px 4px rgb(0 0 0 / 0.15), 6px 10px 22px rgb(0 0 0 / 0.18);
+    transition: transform 0.3s ease;
+  }
+  .cover::after {
+    content: '';
+    position: absolute;
+    left: 16%;
+    right: 12%;
+    top: 50%;
+    height: 1px;
+    background: rgb(255 255 255 / 0.4);
+  }
+  .c-title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1rem;
+    line-height: 1.15;
+  }
+  .cover.big .c-title {
+    font-size: 1.3rem;
+  }
+  .c-author {
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    opacity: 0.85;
+  }
+  .fav {
+    position: absolute;
+    top: 6px;
+    right: 8px;
+    color: #ffd76a;
+    font-size: 1rem;
+  }
+
+  .goal {
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+  .goal p {
+    color: var(--muted);
+    margin: 0;
+  }
+  .ring {
+    --p: 0;
+    width: 150px;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    margin-block: 0.5rem 1rem;
+    background: conic-gradient(var(--accent) calc(var(--p) * 1%), var(--surface-2) 0);
+  }
+  .ring > div {
+    width: 118px;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: var(--surface);
+    display: grid;
+    place-content: center;
+  }
+  .ring strong {
+    font-family: var(--font-display);
+    font-size: 2.4rem;
+    line-height: 1;
+  }
+  .ring span {
+    color: var(--muted);
+    font-size: 0.85rem;
+  }
+
+  .shelf-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+  .shelf-head h2 {
+    margin: 0;
+  }
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+  .filters button {
+    font: inherit;
+    font-size: 0.9rem;
+    font-weight: 500;
+    padding: 0.45rem 0.95rem;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    color: var(--ink);
+    cursor: pointer;
+  }
+  .filters button span {
+    color: var(--muted);
+    margin-left: 0.2rem;
+  }
+  .filters button[aria-pressed='true'] {
+    background: var(--ink);
+    color: var(--bg);
+    border-color: var(--ink);
+  }
+  .filters button[aria-pressed='true'] span {
+    color: inherit;
+    opacity: 0.7;
+  }
+
+  .books {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+    gap: 2.25rem 1.5rem;
+  }
+  .book:hover .cover {
+    transform: translateY(-6px) rotate(-1.5deg);
+  }
+  .info {
+    margin-top: 1rem;
+  }
+  .info h3 {
+    font-size: 1.05rem;
+    margin-bottom: 0.1rem;
+  }
+  .info .by {
+    font-size: 0.9rem;
+    margin-bottom: 0.4rem;
+  }
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .shelf {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    padding: 0.15rem 0.55rem;
+    border-radius: 999px;
+  }
+  .shelf-read {
+    background: color-mix(in srgb, var(--pine) 15%, transparent);
+    color: var(--pine);
+  }
+  .shelf-to-read {
+    background: color-mix(in srgb, var(--sky) 15%, transparent);
+    color: var(--sky);
+  }
+  .shelf-reading {
+    background: color-mix(in srgb, var(--accent) 15%, transparent);
+    color: var(--accent);
+  }
+  .stars {
+    color: var(--gold);
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+  }
+  .stars .off {
+    color: var(--line);
+  }
+  .note-sm {
+    font-size: 0.88rem;
+    color: var(--muted);
+    margin: 0.5rem 0 0;
+  }
+
+  @media (max-width: 860px) {
+    .top-row {
+      grid-template-columns: 1fr;
+    }
+  }
+  @media (max-width: 560px) {
+    .now-reading {
+      grid-template-columns: 110px 1fr;
+      gap: 1.25rem;
+      padding: 1.25rem;
+    }
+    .books {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+</style>

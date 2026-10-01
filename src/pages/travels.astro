@@ -1,0 +1,378 @@
+---
+import Base from '../layouts/Base.astro';
+import Airstream from '../components/Airstream.astro';
+import { rig, stats, trips, statesVisited, tips } from '../data/travels';
+
+// Simplified tile-grid US map: [code, column, row]
+const tiles: [string, number, number][] = [
+  ['AK', 0, 0], ['ME', 11, 0],
+  ['VT', 10, 1], ['NH', 11, 1],
+  ['WA', 1, 2], ['ID', 2, 2], ['MT', 3, 2], ['ND', 4, 2], ['MN', 5, 2], ['IL', 6, 2], ['WI', 7, 2], ['MI', 8, 2], ['NY', 9, 2], ['RI', 10, 2], ['MA', 11, 2],
+  ['OR', 1, 3], ['NV', 2, 3], ['WY', 3, 3], ['SD', 4, 3], ['IA', 5, 3], ['IN', 6, 3], ['OH', 7, 3], ['PA', 8, 3], ['NJ', 9, 3], ['CT', 10, 3],
+  ['CA', 1, 4], ['UT', 2, 4], ['CO', 3, 4], ['NE', 4, 4], ['MO', 5, 4], ['KY', 6, 4], ['WV', 7, 4], ['VA', 8, 4], ['MD', 9, 4], ['DE', 10, 4],
+  ['AZ', 2, 5], ['NM', 3, 5], ['KS', 4, 5], ['AR', 5, 5], ['TN', 6, 5], ['NC', 7, 5], ['SC', 8, 5], ['DC', 9, 5],
+  ['OK', 4, 6], ['LA', 5, 6], ['MS', 6, 6], ['AL', 7, 6], ['GA', 8, 6],
+  ['HI', 0, 7], ['TX', 4, 7], ['FL', 9, 7],
+];
+const visited = new Set(statesVisited.map((s) => s.toUpperCase()));
+---
+
+<Base title="Airstream Travels" description="Trip logs, campsites, and lessons from life on the road in an Airstream.">
+  <section class="travel-hero">
+    <div class="container hero-inner">
+      <div>
+        <span class="eyebrow">Airstream travels</span>
+        <h1>Home is where we park it.</h1>
+        <p class="lede">
+          Riveted aluminum, a long stretch of two-lane highway, and a new trailhead out the front door. These are the
+          routes, campsites, and lessons from life behind a silver bullet.
+        </p>
+      </div>
+      <div class="hero-rig">
+        <Airstream width={420} />
+        <div class="ground" aria-hidden="true"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="container stats">
+    {
+      stats.map((s) => (
+        <div class="stat card reveal">
+          <strong>{s.value === 'TODO' ? '—' : s.value}</strong>
+          <span>{s.label}</span>
+        </div>
+      ))
+    }
+  </section>
+
+  <section class="container">
+    <p class="placeholder-note">🚐 Trips, stats, and rig details are placeholders. Edit <code>src/data/travels.ts</code> to log your own.</p>
+  </section>
+
+  <section class="section container log-grid">
+    <div>
+      <span class="eyebrow">Trip log</span>
+      <h2>Where we've been</h2>
+      <ol class="timeline">
+        {
+          trips.map((t) => (
+            <li class:list={['trip', 'reveal', { upcoming: t.upcoming }]}>
+              <span class="pin" aria-hidden="true" />
+              <article class="card trip-card">
+                <header>
+                  <span class="chip">{t.tag}</span>
+                  <span class="dates">{t.dates}</span>
+                </header>
+                <h3>{t.title}</h3>
+                <p class="route">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z" />
+                    <circle cx="12" cy="9.5" r="2.5" />
+                  </svg>
+                  {t.route}
+                </p>
+                <ul>
+                  {t.highlights.map((h) => (
+                    <li>{h}</li>
+                  ))}
+                </ul>
+                {(t.miles || t.nights || t.campgrounds) && (
+                  <footer>
+                    {t.miles ? <span>{t.miles.toLocaleString()} mi</span> : null}
+                    {t.nights ? <span>{t.nights} nights</span> : null}
+                    {t.campgrounds && <span>⛺ {t.campgrounds.join(', ')}</span>}
+                  </footer>
+                )}
+              </article>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+
+    <aside class="side">
+      <section class="card rig-card reveal">
+        <span class="eyebrow">The rig</span>
+        <h3>{rig.name}</h3>
+        <dl>
+          <div><dt>Model</dt><dd>{rig.model}</dd></div>
+          <div><dt>Year</dt><dd>{rig.year}</dd></div>
+          <div><dt>Tow vehicle</dt><dd>{rig.towVehicle}</dd></div>
+        </dl>
+        <h4>Mods &amp; upgrades</h4>
+        <ul>
+          {rig.mods.map((m) => <li>{m}</li>)}
+        </ul>
+      </section>
+
+      <section class="card map-card reveal">
+        <span class="eyebrow">States camped</span>
+        <h3>{visited.size} of 50</h3>
+        <div class="tilemap" role="img" aria-label={`Visited states: ${[...visited].join(', ') || 'none yet'}`}>
+          {
+            tiles.map(([code, x, y]) => (
+              <span class:list={['tile', { on: visited.has(code) }]} style={`grid-column:${x + 1};grid-row:${y + 1}`}>
+                {code}
+              </span>
+            ))
+          }
+        </div>
+      </section>
+    </aside>
+  </section>
+
+  <section class="section tips-band">
+    <div class="container">
+      <span class="eyebrow">Road lessons</span>
+      <h2>Things the road taught me</h2>
+      <div class="tips">
+        {
+          tips.map((t) => (
+            <article class="card tip reveal">
+              <h3>{t.title}</h3>
+              <p>{t.body}</p>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .travel-hero {
+    padding-block: clamp(3rem, 7vw, 5.5rem) 2rem;
+    background: linear-gradient(180deg, color-mix(in srgb, #f7c59f 35%, transparent), transparent);
+  }
+  :global([data-theme='dark']) .travel-hero {
+    background: linear-gradient(180deg, color-mix(in srgb, #5b4a6e 35%, transparent), transparent);
+  }
+  .hero-inner {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 3rem;
+    align-items: center;
+  }
+  .hero-rig {
+    position: relative;
+    padding-bottom: 1rem;
+  }
+  .hero-rig :global(svg) {
+    width: 100%;
+    height: auto;
+    position: relative;
+    z-index: 1;
+    filter: drop-shadow(0 14px 10px rgb(0 0 0 / 0.18));
+  }
+  .ground {
+    position: absolute;
+    left: -5%;
+    right: -5%;
+    bottom: 1.2rem;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--muted), transparent);
+    opacity: 0.5;
+  }
+
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin-block: 2rem 1rem;
+  }
+  .stat {
+    padding: 1.4rem;
+    text-align: center;
+  }
+  .stat strong {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 2.4rem;
+    line-height: 1.1;
+    color: var(--accent);
+  }
+  .stat span {
+    color: var(--muted);
+    font-size: 0.9rem;
+  }
+
+  .log-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 360px;
+    gap: 3rem;
+    align-items: start;
+  }
+  .timeline {
+    list-style: none;
+    margin: 2rem 0 0;
+    padding: 0;
+    position: relative;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 9px;
+    top: 0.5rem;
+    bottom: 0.5rem;
+    border-left: 2px dashed var(--line);
+  }
+  .trip {
+    position: relative;
+    padding-left: 2.6rem;
+    margin-bottom: 1.5rem;
+  }
+  .pin {
+    position: absolute;
+    left: 0;
+    top: 1.6rem;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--surface);
+    border: 4px solid var(--pine);
+  }
+  .trip.upcoming .pin {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 5px color-mix(in srgb, var(--accent) 20%, transparent);
+  }
+  .trip-card {
+    padding: 1.5rem;
+  }
+  .trip.upcoming .trip-card {
+    border-style: dashed;
+    border-color: var(--accent);
+  }
+  .trip-card header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
+  }
+  .dates {
+    color: var(--muted);
+    font-size: 0.88rem;
+  }
+  .trip-card h3 {
+    margin-bottom: 0.3rem;
+  }
+  .route {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--pine);
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+  .trip-card ul {
+    margin: 0;
+    padding-left: 1.1rem;
+    color: var(--muted);
+  }
+  .trip-card footer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 1rem;
+    padding-top: 0.8rem;
+    border-top: 1px solid var(--line);
+    font-size: 0.88rem;
+    font-weight: 600;
+  }
+
+  .side {
+    display: grid;
+    gap: 1.5rem;
+    position: sticky;
+    top: 90px;
+  }
+  .rig-card,
+  .map-card {
+    padding: 1.6rem;
+  }
+  .rig-card dl {
+    margin: 0 0 1.25rem;
+  }
+  .rig-card dl div {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-block: 0.5rem;
+    border-bottom: 1px solid var(--line);
+    font-size: 0.92rem;
+  }
+  .rig-card dt {
+    color: var(--muted);
+  }
+  .rig-card dd {
+    margin: 0;
+    font-weight: 600;
+    text-align: right;
+  }
+  .rig-card h4 {
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    margin-bottom: 0.4rem;
+  }
+  .rig-card ul {
+    margin: 0;
+    padding-left: 1.1rem;
+    font-size: 0.92rem;
+    color: var(--muted);
+  }
+
+  .tilemap {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 3px;
+  }
+  .tile {
+    aspect-ratio: 1;
+    display: grid;
+    place-items: center;
+    font-size: 0.55rem;
+    font-weight: 700;
+    border-radius: 4px;
+    background: var(--surface-2);
+    color: var(--muted);
+  }
+  .tile.on {
+    background: var(--pine);
+    color: #fff;
+  }
+
+  .tips-band {
+    background: var(--surface-2);
+    border-block: 1px solid var(--line);
+  }
+  .tips {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+    margin-top: 2rem;
+  }
+  .tip {
+    padding: 1.6rem;
+  }
+  .tip p {
+    color: var(--muted);
+    margin: 0;
+  }
+
+  @media (max-width: 960px) {
+    .hero-inner,
+    .log-grid {
+      grid-template-columns: 1fr;
+    }
+    .side {
+      position: static;
+    }
+    .stats {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .tips {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

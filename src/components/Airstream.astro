@@ -1,0 +1,54 @@
+---
+interface Props {
+  class?: string;
+  width?: number;
+}
+const { class: className, width = 240 } = Astro.props;
+---
+
+<svg
+  class={className}
+  width={width}
+  viewBox="0 0 260 120"
+  role="img"
+  aria-label="Airstream trailer"
+>
+  <defs>
+    <linearGradient id="aluminum" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f4f6f7" />
+      <stop offset="0.45" stop-color="#cdd4d8" />
+      <stop offset="0.55" stop-color="#b3bcc1" />
+      <stop offset="1" stop-color="#8e989e" />
+    </linearGradient>
+  </defs>
+  <!-- hitch -->
+  <path d="M8 92 L34 92" stroke="#3a4448" stroke-width="4" stroke-linecap="round" />
+  <rect x="2" y="86" width="10" height="10" rx="2" fill="#3a4448" />
+  <!-- body -->
+  <path
+    d="M34 94 C22 94 20 58 40 34 C58 14 92 8 140 8 C188 8 216 14 232 34 C250 56 250 94 236 94 Z"
+    fill="url(#aluminum)"
+    stroke="#6f7a80"
+    stroke-width="1.5"
+  />
+  <!-- seams -->
+  <path d="M40 40 C70 30 110 28 140 28 C172 28 208 30 236 40" fill="none" stroke="#9aa4a9" stroke-width="0.8" opacity="0.7" />
+  <path d="M30 70 L244 70" stroke="#9aa4a9" stroke-width="0.8" opacity="0.6" />
+  <!-- front window -->
+  <path d="M42 52 C48 38 60 30 74 28 L74 52 Z" fill="#2c3d45" opacity="0.85" />
+  <!-- side windows -->
+  <rect x="96" y="38" width="34" height="20" rx="5" fill="#2c3d45" opacity="0.85" />
+  <rect x="190" y="38" width="30" height="20" rx="5" fill="#2c3d45" opacity="0.85" />
+  <!-- door -->
+  <rect x="146" y="34" width="26" height="56" rx="6" fill="none" stroke="#6f7a80" stroke-width="1.5" />
+  <rect x="151" y="40" width="16" height="14" rx="3" fill="#2c3d45" opacity="0.85" />
+  <circle cx="167" cy="66" r="1.8" fill="#4a555a" />
+  <!-- stripe -->
+  <path d="M28 80 L246 80" stroke="var(--accent, #d2592a)" stroke-width="3" opacity="0.85" />
+  <!-- wheel -->
+  <path d="M104 94 a18 18 0 0 1 36 0" fill="#3a4448" />
+  <circle cx="122" cy="98" r="13" fill="#1f2628" />
+  <circle cx="122" cy="98" r="5.5" fill="#c3cacd" />
+  <!-- jack -->
+  <path d="M50 94 L50 108" stroke="#3a4448" stroke-width="3" />
+</svg>

@@ -1,0 +1,197 @@
+---
+import Base from '../layouts/Base.astro';
+import { profile } from '../data/profile';
+
+// TODO: Make these yours. They're written as a starting voice and structure.
+const chapters = [
+  {
+    label: 'Work',
+    title: 'Curious problem-solver',
+    body: 'I like hard problems and the teams that tackle them. My career has been about connecting technology to the people it serves, and leaving things better than I found them.',
+  },
+  {
+    label: 'Endurance',
+    title: 'Multisport athlete & coach',
+    body: 'Triathlon taught me that big goals are just lots of small, consistent days stacked together. Coaching lets me pass that on, helping athletes find a version of themselves they did not know was there.',
+  },
+  {
+    label: 'Reading',
+    title: 'Perpetually mid-book',
+    body: 'History, science, philosophy, and the occasional page-turner. There is always a book in the bag and two more waiting on the nightstand.',
+  },
+  {
+    label: 'Travel',
+    title: 'Home is where we park it',
+    body: 'An aluminum trailer, a long road, and a new trailhead out the door. The Airstream turned travel into a way of life, with plenty of new running routes along the way.',
+  },
+];
+
+const values = [
+  { k: 'Consistency', v: 'Small things done daily beat big things done occasionally.' },
+  { k: 'Curiosity', v: 'Ask the next question. Read the next chapter. Take the next exit.' },
+  { k: 'Generosity', v: 'Share what you know. Lift people up on the way.' },
+  { k: 'Adventure', v: 'Comfort zones are nice places, but nothing grows there.' },
+];
+
+const favorites = [
+  { k: 'Race distance', v: 'TODO: e.g. 70.3' },
+  { k: 'Training session', v: 'TODO: e.g. Long ride, coffee stop' },
+  { k: 'National park', v: 'TODO' },
+  { k: 'Book of all time', v: 'TODO' },
+  { k: 'Campsite view', v: 'TODO' },
+  { k: 'Post-race meal', v: 'TODO' },
+];
+---
+
+<Base title="About" description={`About ${profile.name}: technologist, multisport coach, reader, and Airstream traveler.`}>
+  <section class="container page-hero">
+    <span class="eyebrow">About me</span>
+    <h1>Hi, I'm {profile.name.split(' ')[0]}.</h1>
+    <p class="lede">
+      I'm a {profile.roles.slice(0, -1).join(', ')}, and {profile.roles.at(-1)}. I'm happiest when I'm learning something,
+      helping someone reach a goal, or watching the sun come up somewhere new.
+    </p>
+    <p class="placeholder-note">✏️ The copy on this page is a starter draft. Edit <code>src/pages/about.astro</code> to make it yours.</p>
+  </section>
+
+  <section class="container chapters">
+    {
+      chapters.map((c, i) => (
+        <article class="chapter reveal">
+          <span class="num">0{i + 1}</span>
+          <div>
+            <span class="eyebrow">{c.label}</span>
+            <h2>{c.title}</h2>
+            <p>{c.body}</p>
+          </div>
+        </article>
+      ))
+    }
+  </section>
+
+  <section class="section values-band">
+    <div class="container">
+      <span class="eyebrow">What I believe</span>
+      <h2>Values I try to live by</h2>
+      <div class="values">
+        {
+          values.map((v) => (
+            <div class="value card reveal">
+              <h3>{v.k}</h3>
+              <p>{v.v}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section container">
+    <div class="split">
+      <div class="reveal">
+        <span class="eyebrow">Quick hits</span>
+        <h2>A few favorites</h2>
+        <p class="lede">The quickest way to get to know someone is to ask about their favorite things.</p>
+      </div>
+      <dl class="favs card reveal">
+        {
+          favorites.map((f) => (
+            <div>
+              <dt>{f.k}</dt>
+              <dd>{f.v}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .chapters {
+    display: grid;
+    gap: 0;
+  }
+  .chapter {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 2rem;
+    padding-block: 2.5rem;
+    border-top: 1px solid var(--line);
+  }
+  .chapter p {
+    color: var(--muted);
+    max-width: 65ch;
+    font-size: 1.1rem;
+  }
+  .num {
+    font-family: var(--font-display);
+    font-size: 3.5rem;
+    line-height: 1;
+    color: color-mix(in srgb, var(--accent) 70%, transparent);
+  }
+  .values-band {
+    background: var(--surface-2);
+    border-block: 1px solid var(--line);
+    margin-top: 3rem;
+  }
+  .values {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.25rem;
+    margin-top: 2rem;
+  }
+  .value {
+    padding: 1.5rem;
+    border-top: 4px solid var(--accent);
+  }
+  .value p {
+    color: var(--muted);
+    margin: 0;
+  }
+  .split {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 3rem;
+    align-items: center;
+  }
+  .favs {
+    margin: 0;
+    padding: 0.5rem 1.5rem;
+  }
+  .favs div {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-block: 0.9rem;
+    border-bottom: 1px solid var(--line);
+  }
+  .favs div:last-child {
+    border-bottom: 0;
+  }
+  .favs dt {
+    color: var(--muted);
+  }
+  .favs dd {
+    margin: 0;
+    font-weight: 600;
+    text-align: right;
+  }
+  @media (max-width: 900px) {
+    .values {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .split {
+      grid-template-columns: 1fr;
+    }
+  }
+  @media (max-width: 600px) {
+    .chapter {
+      grid-template-columns: 1fr;
+      gap: 0.5rem;
+    }
+    .values {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -1,0 +1,86 @@
+---
+import { profile, nav } from '../data/profile';
+
+const year = new Date().getFullYear();
+const labels: Record<string, string> = { linkedin: 'LinkedIn', strava: 'Strava', goodreads: 'Goodreads', instagram: 'Instagram' };
+const socials = Object.entries(profile.social).filter(([, url]) => url);
+---
+
+<footer class="site-footer">
+  <div class="container inner">
+    <div>
+      <p class="sign">{profile.name}</p>
+      <p class="muted">{profile.tagline}</p>
+    </div>
+    <nav aria-label="Footer">
+      <ul>
+        {nav.map((item) => <li><a href={item.href}>{item.label}</a></li>)}
+      </ul>
+    </nav>
+    <ul class="social">
+      {
+        socials.map(([name, url]) => (
+          <li>
+            <a href={url} target="_blank" rel="noopener noreferrer">
+              {labels[name] ?? name}
+            </a>
+          </li>
+        ))
+      }
+      <li><a href={`mailto:${profile.email}`}>Email</a></li>
+    </ul>
+  </div>
+  <div class="container legal">© {year} {profile.name}. Made with care, coffee, and miles.</div>
+</footer>
+
+<style>
+  .site-footer {
+    border-top: 1px solid var(--line);
+    margin-top: 4rem;
+    padding-block: 3rem 2rem;
+    font-size: 0.95rem;
+  }
+  .inner {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 2rem;
+  }
+  .sign {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-bottom: 0.3rem;
+  }
+  .muted {
+    color: var(--muted);
+    max-width: 40ch;
+  }
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.4rem;
+    align-content: start;
+  }
+  a {
+    text-decoration: none;
+    color: var(--muted);
+  }
+  a:hover {
+    color: var(--accent);
+  }
+  .legal {
+    margin-top: 2.5rem;
+    color: var(--muted);
+    font-size: 0.85rem;
+  }
+  @media (max-width: 700px) {
+    .inner {
+      grid-template-columns: 1fr 1fr;
+    }
+    .inner > div:first-child {
+      grid-column: 1 / -1;
+    }
+  }
+</style>

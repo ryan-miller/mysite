@@ -1,0 +1,590 @@
+---
+// Resume laid out like a LinkedIn profile: banner, identity card, then stacked section cards.
+import Base from '../layouts/Base.astro';
+import { profile } from '../data/profile';
+import { resume } from '../data/resume';
+
+const palette = ['#3b6ea5', '#2f6f6a', '#d2592a', '#b98d1f', '#7a5aa6'];
+const logoColor = (name: string) => palette[[...name].reduce((a, c) => a + c.charCodeAt(0), 0) % palette.length];
+const logoText = (name: string) =>
+  name
+    .replace(/^TODO:\s*/, '')
+    .split(/\s+/)
+    .map((w) => w[0])
+    .join('')
+    .slice(0, 2)
+    .toUpperCase();
+---
+
+<Base title="Resume" description={`${profile.name}: experience, education, and skills.`}>
+  <div class="container resume">
+    <div class="toolbar">
+      <p class="placeholder-note">
+        ✏️ LinkedIn doesn't allow automated imports, so this page reads from <code>src/data/resume.ts</code>. Replace the TODOs with your profile details.
+      </p>
+      <button class="btn btn-ghost print-btn" type="button" onclick="window.print()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V3h12v6M6 18H4v-7h16v7h-2M8 14h8v7H8z"></path></svg>
+        Print / Save PDF
+      </button>
+    </div>
+
+    <div class="layout">
+      <div class="main">
+        <!-- Identity card -->
+        <section class="card identity">
+          <div class="banner" aria-hidden="true">
+            <svg viewBox="0 0 800 200" preserveAspectRatio="none">
+              <path d="M0 140 L120 80 L210 120 L330 50 L450 115 L560 70 L680 120 L800 80 L800 200 L0 200Z" fill="rgb(255 255 255 / 0.12)"></path>
+              <path d="M0 170 L150 130 L280 160 L420 110 L560 155 L700 125 L800 150 L800 200 L0 200Z" fill="rgb(255 255 255 / 0.18)"></path>
+            </svg>
+          </div>
+          <div class="id-body">
+            <div class="avatar" aria-hidden="true">{profile.initials}</div>
+            <div class="id-row">
+              <div>
+                <h1>{profile.name}</h1>
+                <p class="headline">{profile.headline}</p>
+                <p class="meta">
+                  {profile.location} · <a href={`mailto:${profile.email}`}>Contact info</a>
+                </p>
+                <p class="meta"><a href={profile.social.linkedin} target="_blank" rel="noopener noreferrer">{resume.connections} connections</a></p>
+              </div>
+              <div class="current">
+                {
+                  resume.experience.slice(0, 1).map((e) => (
+                    <div class="current-item">
+                      <span class="mini-logo" style={`background:${logoColor(e.company)}`}>{logoText(e.company)}</span>
+                      {e.company}
+                    </div>
+                  ))
+                }
+                {
+                  resume.education.slice(0, 1).map((e) => (
+                    <div class="current-item">
+                      <span class="mini-logo" style="background:var(--muted)">{logoText(e.school)}</span>
+                      {e.school}
+                    </div>
+                  ))
+                }
+              </div>
+            </div>
+            <div class="id-actions">
+              <a class="btn btn-primary" href={profile.social.linkedin} target="_blank" rel="noopener noreferrer">Connect on LinkedIn</a>
+              <a class="btn btn-ghost" href={`mailto:${profile.email}`}>Message</a>
+            </div>
+            <div class="open-to">
+              <strong>Open to</strong>
+              {resume.openTo.join(', ')}
+            </div>
+          </div>
+        </section>
+
+        <!-- About -->
+        <section class="card block">
+          <h2>About</h2>
+          <p class="about-text">{resume.about}</p>
+          <div class="top-skills">
+            <span>◆ Top skills</span>
+            {resume.featuredSkills.join(' • ')}
+          </div>
+        </section>
+
+        <!-- Experience -->
+        <section class="card block">
+          <h2>Experience</h2>
+          <ol class="exp-list">
+            {
+              resume.experience.map((exp) => (
+                <li class="exp">
+                  <span class="logo" style={`background:${logoColor(exp.company)}`} aria-hidden="true">
+                    {logoText(exp.company)}
+                  </span>
+                  <div class="exp-body">
+                    {exp.roles.length > 1 && (
+                      <header class="company-head">
+                        <h3>{exp.company}</h3>
+                        <p class="sub">{exp.roles.length} roles</p>
+                      </header>
+                    )}
+                    <ol class={exp.roles.length > 1 ? 'roles multi' : 'roles'}>
+                      {exp.roles.map((r) => (
+                        <li class="role">
+                          <h3 class={exp.roles.length > 1 ? 'role-title' : ''}>{r.title}</h3>
+                          {exp.roles.length === 1 && (
+                            <p class="sub">
+                              {exp.company}
+                              {r.type && ` · ${r.type}`}
+                            </p>
+                          )}
+                          <p class="dates">
+                            {r.start} – {r.end ?? 'Present'}
+                            {r.location && ` · ${r.location}`}
+                          </p>
+                          {r.description && <p class="desc">{r.description}</p>}
+                          {r.highlights && (
+                            <ul class="highlights">
+                              {r.highlights.map((h) => (
+                                <li>{h}</li>
+                              ))}
+                            </ul>
+                          )}
+                          {r.skills && (
+                            <p class="role-skills">
+                              <strong>Skills:</strong> {r.skills.join(' · ')}
+                            </p>
+                          )}
+                        </li>
+                      ))}
+                    </ol>
+                  </div>
+                </li>
+              ))
+            }
+          </ol>
+        </section>
+
+        <!-- Education -->
+        <section class="card block">
+          <h2>Education</h2>
+          <ol class="exp-list">
+            {
+              resume.education.map((ed) => (
+                <li class="exp">
+                  <span class="logo" style="background:var(--muted)" aria-hidden="true">
+                    {logoText(ed.school)}
+                  </span>
+                  <div class="exp-body">
+                    <h3>{ed.school}</h3>
+                    <p class="sub">{ed.degree}</p>
+                    <p class="dates">{ed.years}</p>
+                    {ed.notes && <p class="desc">{ed.notes}</p>}
+                  </div>
+                </li>
+              ))
+            }
+          </ol>
+        </section>
+
+        <!-- Certifications -->
+        <section class="card block">
+          <h2>Licenses &amp; certifications</h2>
+          <ol class="exp-list">
+            {
+              resume.certifications.map((c) => (
+                <li class="exp">
+                  <span class="logo" style={`background:${logoColor(c.issuer)}`} aria-hidden="true">
+                    {logoText(c.issuer)}
+                  </span>
+                  <div class="exp-body">
+                    <h3>{c.name}</h3>
+                    <p class="sub">{c.issuer}</p>
+                    <p class="dates">Issued {c.year}</p>
+                  </div>
+                </li>
+              ))
+            }
+          </ol>
+        </section>
+
+        <!-- Skills -->
+        <section class="card block">
+          <h2>Skills</h2>
+          <ul class="skills">
+            {
+              resume.skills.map((s) => (
+                <li>
+                  <span class="skill-name">{s.name}</span>
+                  {s.endorsements > 0 && <span class="endorse">{s.endorsements} endorsements</span>}
+                </li>
+              ))
+            }
+          </ul>
+        </section>
+
+        <!-- Volunteering -->
+        {
+          resume.volunteering.length > 0 && (
+            <section class="card block">
+              <h2>Volunteering</h2>
+              <ul class="plain">
+                {resume.volunteering.map((v) => (
+                  <li>
+                    <h3>{v.role}</h3>
+                    <p class="sub">{v.org}</p>
+                    <p class="dates">{v.years}</p>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )
+        }
+      </div>
+
+      <!-- Sidebar -->
+      <aside class="side">
+        <section class="card side-card">
+          <h2>Profile URL</h2>
+          <a href={profile.social.linkedin} target="_blank" rel="noopener noreferrer" class="url">
+            {profile.social.linkedin.replace('https://www.', '')}
+          </a>
+        </section>
+        <section class="card side-card">
+          <h2>Languages</h2>
+          <ul class="plain">
+            {
+              resume.languages.map((l) => (
+                <li>
+                  <strong>{l.name}</strong>
+                  <p class="dates">{l.level}</p>
+                </li>
+              ))
+            }
+          </ul>
+        </section>
+        <section class="card side-card">
+          <h2>Beyond the résumé</h2>
+          <ul class="links">
+            <li><a href="/coaching/">🏊 Multisport coaching</a></li>
+            <li><a href="/books/">📚 What I'm reading</a></li>
+            <li><a href="/travels/">🚐 Airstream travels</a></li>
+          </ul>
+        </section>
+      </aside>
+    </div>
+  </div>
+</Base>
+
+<style>
+  .resume {
+    padding-top: 2rem;
+  }
+  .toolbar {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.25rem;
+  }
+  .toolbar .placeholder-note {
+    margin: 0;
+    flex: 1;
+  }
+  .layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 300px;
+    gap: 1.5rem;
+    align-items: start;
+  }
+  .main {
+    display: grid;
+    gap: 1rem;
+  }
+  .card {
+    border-radius: 14px;
+  }
+
+  .identity {
+    overflow: hidden;
+  }
+  .banner {
+    height: 180px;
+    background: linear-gradient(120deg, var(--pine), var(--sky) 55%, var(--accent));
+  }
+  .banner svg {
+    width: 100%;
+    height: 100%;
+  }
+  .id-body {
+    position: relative;
+    padding: 0 1.75rem 1.5rem;
+  }
+  .avatar {
+    width: 152px;
+    height: 152px;
+    margin-top: -96px;
+    border-radius: 50%;
+    border: 5px solid var(--surface);
+    display: grid;
+    place-items: center;
+    background:
+      radial-gradient(circle at 30% 25%, color-mix(in srgb, var(--accent) 60%, transparent), transparent 60%),
+      var(--ink);
+    color: var(--bg);
+    font-family: var(--font-display);
+    font-size: 3.4rem;
+    font-weight: 700;
+  }
+  .id-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 1.5rem;
+    margin-top: 0.75rem;
+  }
+  .identity h1 {
+    font-size: 1.85rem;
+    margin-bottom: 0.15rem;
+  }
+  .headline {
+    font-size: 1.05rem;
+    margin-bottom: 0.4rem;
+  }
+  .meta {
+    font-size: 0.9rem;
+    color: var(--muted);
+    margin-bottom: 0.25rem;
+  }
+  .meta a {
+    color: var(--sky);
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .current {
+    display: grid;
+    gap: 0.6rem;
+    align-content: start;
+    font-size: 0.9rem;
+    font-weight: 600;
+    min-width: 200px;
+  }
+  .current-item {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  .mini-logo {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    color: #fff;
+    font-size: 0.7rem;
+    font-weight: 700;
+  }
+  .id-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-top: 1rem;
+  }
+  .id-actions .btn {
+    padding: 0.5rem 1.1rem;
+  }
+  .open-to {
+    margin-top: 1rem;
+    padding: 0.8rem 1rem;
+    border-radius: 10px;
+    background: color-mix(in srgb, var(--pine) 10%, transparent);
+    font-size: 0.92rem;
+  }
+  .open-to strong {
+    display: block;
+  }
+
+  .block {
+    padding: 1.5rem 1.75rem;
+  }
+  .block h2,
+  .side-card h2 {
+    font-family: var(--font-body);
+    font-size: 1.25rem;
+    font-weight: 700;
+    letter-spacing: 0;
+    margin-bottom: 1rem;
+  }
+  .about-text {
+    white-space: pre-line;
+  }
+  .top-skills {
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 0.8rem 1rem;
+    font-size: 0.92rem;
+  }
+  .top-skills span {
+    display: block;
+    font-weight: 700;
+  }
+
+  .exp-list,
+  .roles,
+  .plain,
+  .skills,
+  .links {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .exp {
+    display: grid;
+    grid-template-columns: 52px 1fr;
+    gap: 1rem;
+    padding-block: 1rem;
+    border-top: 1px solid var(--line);
+  }
+  .exp:first-child {
+    border-top: 0;
+    padding-top: 0;
+  }
+  .logo {
+    display: grid;
+    place-items: center;
+    width: 52px;
+    height: 52px;
+    border-radius: 8px;
+    color: #fff;
+    font-weight: 700;
+  }
+  .exp h3,
+  .plain h3 {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0;
+    margin: 0;
+  }
+  .sub {
+    font-size: 0.92rem;
+    margin: 0;
+  }
+  .dates {
+    font-size: 0.88rem;
+    color: var(--muted);
+    margin: 0 0 0.4rem;
+  }
+  .desc,
+  .highlights {
+    font-size: 0.95rem;
+  }
+  .highlights {
+    padding-left: 1.1rem;
+    margin: 0.4rem 0;
+  }
+  .role-skills {
+    font-size: 0.88rem;
+    color: var(--muted);
+  }
+  .company-head {
+    margin-bottom: 0.8rem;
+  }
+  .roles.multi .role {
+    position: relative;
+    padding-left: 1.4rem;
+    padding-bottom: 1rem;
+  }
+  .roles.multi .role::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.45rem;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--line);
+    border: 2px solid var(--muted);
+  }
+  .roles.multi .role:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    left: 5px;
+    top: 1.2rem;
+    bottom: 0;
+    width: 2px;
+    background: var(--line);
+  }
+  .role-title {
+    font-weight: 700;
+  }
+
+  .skills li {
+    padding-block: 0.85rem;
+    border-top: 1px solid var(--line);
+    display: flex;
+    justify-content: space-between;
+  }
+  .skills li:first-child {
+    border-top: 0;
+    padding-top: 0;
+  }
+  .skill-name {
+    font-weight: 600;
+  }
+  .endorse {
+    color: var(--muted);
+    font-size: 0.88rem;
+  }
+  .plain li + li {
+    margin-top: 0.9rem;
+  }
+
+  .side {
+    display: grid;
+    gap: 1rem;
+    position: sticky;
+    top: 88px;
+  }
+  .side-card {
+    padding: 1.25rem 1.4rem;
+  }
+  .side-card h2 {
+    font-size: 1.05rem;
+    margin-bottom: 0.6rem;
+  }
+  .url {
+    font-size: 0.9rem;
+    color: var(--sky);
+    word-break: break-all;
+  }
+  .links li + li {
+    margin-top: 0.5rem;
+  }
+  .links a {
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  @media (max-width: 900px) {
+    .layout {
+      grid-template-columns: 1fr;
+    }
+    .side {
+      position: static;
+    }
+    .id-row {
+      flex-direction: column;
+    }
+    .toolbar {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  }
+
+  @media print {
+    :global(.site-header),
+    :global(.site-footer),
+    .toolbar,
+    .side,
+    .id-actions,
+    .banner {
+      display: none !important;
+    }
+    .layout {
+      grid-template-columns: 1fr;
+    }
+    .card {
+      box-shadow: none;
+      border: 0;
+    }
+    .avatar {
+      margin-top: 0;
+      width: 80px;
+      height: 80px;
+      font-size: 1.8rem;
+    }
+    .block {
+      break-inside: avoid;
+      padding-inline: 0;
+    }
+  }
+</style>
