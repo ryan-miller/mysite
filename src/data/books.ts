@@ -27,7 +27,7 @@ export const books: Book[] = [
     //note: 'The limits of performance are more in the mind than we think.',
   },
   {
-    title: 'The Heart's Invisible Furies',
+    title: 'The Heart\'s Invisible Furies',
     author: 'John Boyne',
     shelf: 'reading',
     //genre: 'Travel',
