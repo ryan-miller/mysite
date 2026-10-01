@@ -6,7 +6,7 @@ export const rig = {
   model: 'Airstream International 25FBT',
   year: '2023',
   towVehicle: '2024 Ford F-250 Tremor',
-  mods: ['300w Solar, 200 ah Battleborn LifePO4 batteries, One Up bike rack'],
+  mods: ['300w Solar', '200 ah Battleborn LifePO4 batteries', 'One Up bike rack'],
 };
 
 export const stats = [
