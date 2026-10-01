@@ -7,7 +7,7 @@ import { trips } from '../data/travels';
 import { coaching } from '../data/coaching';
 
 const nowReading = books.find((b) => b.shelf === 'reading');
-const nextTrip = trips.find((t) => t.upcoming && !t.route.includes('TODO'));
+const nextTrip = trips.find((t) => t.upcoming && t.route && !t.route.includes('TODO'));
 
 const portals = [
   {
@@ -89,7 +89,7 @@ const portals = [
               <div>
                 <dt>Next stop</dt>
                 <dd>
-                  <a href="/travels/">{nextTrip.route.split('→').pop()?.trim()}</a>
+                  <a href="/travels/">{nextTrip.route?.split(/→|->/).pop()?.trim()}</a>
                 </dd>
               </div>
             )

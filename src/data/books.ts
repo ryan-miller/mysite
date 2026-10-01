@@ -1,14 +1,14 @@
 // Your bookshelf. Add, remove, or re-shelve freely.
-// shelf: 'reading' | 'read' | 'to-read'. favorite + rating are optional.
+// shelf: 'reading' | 'read' | 'paused' | 'to-read'. favorite + rating are optional.
 // The sample titles are placeholders. Swap in your own.
 
-export type Shelf = 'reading' | 'read' | 'to-read';
+export type Shelf = 'reading' | 'read' | 'paused' | 'to-read';
 
 export interface Book {
   title: string;
   author: string;
   shelf: Shelf;
-  genre: string;
+  genre?: string;
   rating?: 1 | 2 | 3 | 4 | 5;
   favorite?: boolean;
   year?: number; // year you read it
@@ -74,7 +74,7 @@ export const books: Book[] = [
   {
     title: 'A Little Life',
     author: '',
-    shelf: 'Paused',
+    shelf: 'paused',
     //genre: 'Travel',
     //rating: ,
     //favorite: true,

@@ -65,6 +65,7 @@ const visited = new Set(statesVisited.map((s) => s.toUpperCase()));
                   <span class="dates">{t.dates}</span>
                 </header>
                 <h3>{t.title}</h3>
+                {t.route && (
                 <p class="route">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z" />
@@ -72,11 +73,14 @@ const visited = new Set(statesVisited.map((s) => s.toUpperCase()));
                   </svg>
                   {t.route}
                 </p>
-                <ul>
-                  {t.highlights.map((h) => (
-                    <li>{h}</li>
-                  ))}
-                </ul>
+                )}
+                {t.highlights && (
+                  <ul>
+                    {t.highlights.map((h) => (
+                      <li>{h}</li>
+                    ))}
+                  </ul>
+                )}
                 {(t.miles || t.nights || t.campgrounds) && (
                   <footer>
                     {t.miles ? <span>{t.miles.toLocaleString()} mi</span> : null}

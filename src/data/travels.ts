@@ -19,10 +19,10 @@ export const stats = [
 export interface Trip {
   title: string;
   dates: string;
-  route: string;
+  route?: string;
   miles?: number;
   nights?: number;
-  highlights: string[];
+  highlights?: string[];
   campgrounds?: string[];
   tag: string; // e.g. 'Desert', 'Coast', 'Mountains'
   upcoming?: boolean;

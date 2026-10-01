@@ -7,7 +7,7 @@ const colorFor = (b: Book) =>
   b.color ?? coverColors[[...b.title].reduce((a, c) => a + c.charCodeAt(0), 0) % coverColors.length];
 
 const reading = books.filter((b) => b.shelf === 'reading');
-const shelfOrder = { reading: 0, read: 1, 'to-read': 2 } as const;
+const shelfOrder = { reading: 0, read: 1, paused: 2, 'to-read': 3 } as const;
 const library = [...books].sort((a, b) => shelfOrder[a.shelf] - shelfOrder[b.shelf]);
 const counts = {
   all: books.length,
@@ -17,7 +17,7 @@ const counts = {
 };
 const goalDone = readingGoal.done || counts.read;
 const goalPct = Math.min(100, Math.round((goalDone / readingGoal.target) * 100));
-const shelfLabel = { reading: 'Reading now', read: 'Read', 'to-read': 'Want to read' };
+const shelfLabel = { reading: 'Reading now', read: 'Read', paused: 'Paused', 'to-read': 'Want to read' };
 ---
 
 <Base title="Books & Reading" description="What I'm reading, what I loved, and what's next on the stack.">
@@ -39,9 +39,9 @@ const shelfLabel = { reading: 'Reading now', read: 'Read', 'to-read': 'Want to r
           <div>
             <span class="eyebrow">Currently reading</span>
             <h2>{b.title}</h2>
-            <p class="by">by {b.author}</p>
+            {b.author && <p class="by">by {b.author}</p>}
             {b.note && <p class="note">“{b.note}”</p>}
-            <span class="chip">{b.genre}</span>
+            {b.genre && <span class="chip">{b.genre}</span>}
           </div>
         </article>
       ))
@@ -80,7 +80,7 @@ const shelfLabel = { reading: 'Reading now', read: 'Read', 'to-read': 'Want to r
             </div>
             <div class="info">
               <h3>{b.title}</h3>
-              <p class="by">{b.author}</p>
+              {b.author && <p class="by">{b.author}</p>}
               <div class="row">
                 <span class={`shelf shelf-${b.shelf}`}>{shelfLabel[b.shelf]}</span>
                 {b.rating && (
@@ -312,6 +312,10 @@ const shelfLabel = { reading: 'Reading now', read: 'Read', 'to-read': 'Want to r
   .shelf-to-read {
     background: color-mix(in srgb, var(--sky) 15%, transparent);
     color: var(--sky);
+  }
+  .shelf-paused {
+    background: color-mix(in srgb, var(--gold) 15%, transparent);
+    color: var(--gold);
   }
   .shelf-reading {
     background: color-mix(in srgb, var(--accent) 15%, transparent);
