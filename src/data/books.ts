@@ -16,24 +16,24 @@ export interface Book {
   color?: string; // cover color; auto-picked if omitted
 }
 
-export const readingGoal = { year: 2026, target: 30, done: 0 }; // TODO: your numbers
+export const readingGoal = { year: 2026, target: 12, done: 12 }; // TODO: your numbers
 
 export const books: Book[] = [
   {
-    title: 'Endure',
-    author: 'Alex Hutchinson',
-    shelf: 'reading',
-    genre: 'Sport & Science',
-    note: 'The limits of performance are more in the mind than we think.',
+    title: 'Remarkably Bright Creatures',
+    author: 'Shelby Van Pelt',
+    shelf: 'read',
+    //genre: 'Sport & Science',
+    //note: 'The limits of performance are more in the mind than we think.',
   },
   {
-    title: 'Travels with Charley',
-    author: 'John Steinbeck',
-    shelf: 'read',
-    genre: 'Travel',
+    title: 'The Heart's Invisible Furies',
+    author: 'John Boyne',
+    shelf: 'reading',
+    //genre: 'Travel',
     rating: 5,
-    favorite: true,
-    note: 'The original road-trip-with-a-camper book.',
+    //favorite: true,
+    //note: 'The original road-trip-with-a-camper book.',
   },
   {
     title: 'Born to Run',
