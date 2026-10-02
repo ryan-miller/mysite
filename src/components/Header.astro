@@ -27,6 +27,7 @@ const isActive = (href: string) => path === href || path.startsWith(href);
     </nav>
 
     <div class="actions">
+      <a class="login-btn" href="/login/" aria-current={isActive('/login/') ? 'page' : undefined}>Log in</a>
       <button class="icon-btn" id="theme-toggle" type="button" aria-label="Toggle dark mode">
         <svg class="sun" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.5"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>
         <svg class="moon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path></svg>
@@ -130,6 +131,22 @@ const isActive = (href: string) => path === href || path.startsWith(href);
   .actions {
     display: flex;
     gap: 0.4rem;
+  }
+  .login-btn {
+    display: inline-flex;
+    align-items: center;
+    height: 40px;
+    padding: 0 1rem;
+    border-radius: 12px;
+    background: var(--ink);
+    color: var(--bg);
+    font-weight: 600;
+    font-size: 0.92rem;
+    text-decoration: none;
+  }
+  .login-btn:hover {
+    color: var(--bg);
+    background: var(--accent);
   }
   .icon-btn {
     display: grid;

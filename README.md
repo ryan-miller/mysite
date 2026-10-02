@@ -12,6 +12,8 @@ Personal website for Ryan Miller, built with [Astro](https://astro.build) as a f
 | `/coaching/` | `src/pages/coaching.astro` | `src/data/coaching.ts`    |
 | `/books/`    | `src/pages/books.astro`    | `src/data/books.ts`       |
 | `/travels/`  | `src/pages/travels.astro`  | `src/data/travels.ts`     |
+| `/blog/`     | `src/pages/blog/`          | `src/content/blog/*.md`   |
+| `/login/`    | `src/pages/login.astro`    | posts to `/api/login` (not implemented yet) |
 
 Site-wide name, headline, email, and social links live in `src/data/profile.ts`.
 
@@ -25,6 +27,7 @@ grep -rn TODO src/
 
 - **Resume:** LinkedIn blocks automated imports, so copy details from your profile into `src/data/resume.ts`.
 - **Books:** add entries to `books` with `shelf: 'reading' | 'read' | 'to-read'`. The landing page's "Right now" card shows the book on the `reading` shelf.
+- **Blog:** add a Markdown file to `src/content/blog/` with `title`, `description`, and `date` frontmatter. Set `draft: true` to hide it.
 - **Travels:** add trips to `trips`. Mark the next one `upcoming: true` and it appears as "Next stop" on the landing page. List state codes in `statesVisited` to fill in the map.
 
 ## Development

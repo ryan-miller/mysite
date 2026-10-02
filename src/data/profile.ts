@@ -22,4 +22,5 @@ export const nav = [
   { href: '/coaching/', label: 'Coaching' },
   { href: '/books/', label: 'Books' },
   { href: '/travels/', label: 'Travels' },
+  { href: '/blog/', label: 'Blog' },
 ];

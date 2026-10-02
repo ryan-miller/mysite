@@ -1,0 +1,62 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base title="Log in" description="Log in to the site.">
+  <section class="container login-wrap">
+    <form class="card login" method="post" action="/api/login">
+      <span class="eyebrow">Members</span>
+      <h1>Log in.</h1>
+      <!-- TODO: /api/login doesn't exist yet. This is a static site, so it needs a server adapter or a hosted auth provider. -->
+      <label>
+        Email
+        <input type="email" name="email" autocomplete="email" required />
+      </label>
+      <label>
+        Password
+        <input type="password" name="password" autocomplete="current-password" required />
+      </label>
+      <button class="btn btn-primary" type="submit">Log in</button>
+    </form>
+  </section>
+</Base>
+
+<style>
+  .login-wrap {
+    display: grid;
+    place-items: center;
+    padding-block: clamp(3rem, 8vw, 6rem);
+  }
+  .login {
+    width: min(100%, 420px);
+    padding: 2.25rem;
+    display: grid;
+    gap: 1.1rem;
+  }
+  h1 {
+    font-size: 2.4rem;
+    margin: 0;
+  }
+  label {
+    display: grid;
+    gap: 0.35rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+  input {
+    font: inherit;
+    font-weight: 400;
+    padding: 0.7rem 0.9rem;
+    border-radius: 12px;
+    border: 1px solid var(--line);
+    background: var(--bg);
+    color: var(--ink);
+  }
+  input:focus-visible {
+    border-color: var(--accent);
+  }
+  button {
+    justify-content: center;
+    margin-top: 0.4rem;
+  }
+</style>
