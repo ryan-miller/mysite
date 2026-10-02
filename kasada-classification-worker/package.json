@@ -1,0 +1,19 @@
+{
+  "name": "kasada-classification-worker",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "deploy": "wrangler deploy",
+    "dev": "wrangler dev",
+    "start": "wrangler dev",
+    "test": "vitest"
+  },
+  "devDependencies": {
+    "@cloudflare/vitest-plugin": "^1.0.0",
+    "vitest": "~4.1.0",
+    "wrangler": "^4.147.0"
+  },
+  "dependencies": {
+    "@kasada-packages/cloudflare-sdk": "^1.7.1"
+  }
+}
