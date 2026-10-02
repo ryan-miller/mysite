@@ -39,6 +39,24 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
         document.documentElement.dataset.theme = stored ?? (prefersDark ? 'dark' : 'light');
       })();
     </script>
+    <script type="application/javascript">
+        document.addEventListener('kpsdk-load', async function () {
+            var result = await window.KPSDK.configure({
+                resourceAddress: 'https://about.rymero.com/149e9513-01fa-4fb0-aad4-566afd725d1b/2d206a39-8ed7-437e-a3be-862e0f06eea3/',
+                endpoints: [
+                    {
+                        domain: 'about.rymero.com',
+                        path: '/api/login'
+                    }
+                ]
+            });
+
+            if (result.type === 'Error') {
+                console.error('Web SDK configuration error:', result.errorMessage);
+            }
+        });
+    </script>
+    <script src="https://about.ryanmero.com/149e9513-01fa-4fb0-aad4-566afd725d1b/2d206a39-8ed7-437e-a3be-862e0f06eea3/p.js"></script>
   </head>
   <body>
     <a class="sr-only" href="#main">Skip to content</a>
