@@ -28,7 +28,10 @@
 	 * Note: Use secrets to store sensitive data.
 	 * https://developers.cloudflare.com/workers/configuration/secrets/
 	 */
-	"vars": {  "KASADA_API_DOMAIN": "kasada-website-production-classification-api.kasadapolyform.io", }
+	"vars": {  "KASADA_API_DOMAIN": "kasada-website-production-classification-api.kasadapolyform.io", },
+	"routes": [
+  		{ "pattern": "about.rymero.com/*", "zone_name": "rymero.com" }
+	],
 	/**
 	 * Static Assets
 	 * https://developers.cloudflare.com/workers/static-assets/binding/
